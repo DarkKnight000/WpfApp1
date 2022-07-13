@@ -51,7 +51,7 @@ namespace WpfApp1
 
             try
             {
-                label_FIO.Content = dt_clients.Rows[comboBox.SelectedIndex][0];
+                label_FIO.Content = dt_clients.Rows[comboBox.SelectedIndex][1];
                 label_Phone.Content = dt_clients.Rows[comboBox.SelectedIndex][2];
                 label_Email.Content = dt_clients.Rows[comboBox.SelectedIndex][3];
                 client_id = int.Parse(dt_clients.Rows[comboBox.SelectedIndex][0].ToString());
