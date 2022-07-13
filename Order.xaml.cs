@@ -82,7 +82,7 @@ namespace WpfApp1
             {
                 for (int i = 0; i < MainWindow.dt_order.Rows.Count; i++)
                 {
-                    dt_fromCart.Rows.Add(MainWindow.dt_order.Rows[i][1], MainWindow.dt_order.Rows[i][2], MainWindow.dt_order.Rows[i][3], int.Parse(MainWindow.dt_order.Rows[i][2].ToString())* int.Parse(MainWindow.dt_order.Rows[i][3].ToString()));
+                    dt_fromCart.Rows.Add(MainWindow.dt_order.Rows[i][1], MainWindow.dt_order.Rows[i][2], MainWindow.dt_order.Rows[i][3], int.Parse(MainWindow.dt_order.Rows[i][2].ToString()) * int.Parse(MainWindow.dt_order.Rows[i][3].ToString()));
                 }
                 MainWindow.show_order = false;
             }
@@ -121,7 +121,7 @@ namespace WpfApp1
                                      (product_id, Количество, order_id)
                                      VALUES "
                 ;
-                
+
                 for (int i = 0; i < MainWindow.dt_cart.Rows.Count; i++)
                 {
                     DataBase.sqlcmd += $@"({MainWindow.dt_cart.Rows[i][0]}, {MainWindow.dt_cart.Rows[i][2]}, {dt.Rows[0][0]}), ";
@@ -151,5 +151,13 @@ namespace WpfApp1
             Close();
         }
 
+        // Выбор статуса заказа:
+        private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
+            label_OrderStatus.Content = selectedItem.Content.ToString();
+
+        }
     }
 }

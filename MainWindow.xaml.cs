@@ -181,9 +181,15 @@ namespace WpfApp1
                              $"Номер телефона:   {client.Phone} \n" +
                              $"Email:   {client.Email} \n" +
                              $"День рождения:   {client.BDay}";
-            DataBase.sqlcmd = $@"SELECT *
+
+            /*DataBase.sqlcmd = $@"SELECT *
                                  FROM `order`
-                                 WHERE client_id = {client.Client_id}";
+                                 WHERE client_id = {client.Client_id}";*/
+            DataBase.sqlcmd = $@"SELECT `order`.`order_id`, `order`.`client_id`, `order`.`Дата`, `order`.`Общая сумма`, `order status`.`Статус заказа`
+                                 FROM `order` 
+	                             LEFT JOIN `order status` ON `order`.`Статус заказа` = `order status`.`status_id`
+                                 WHERE client_id = {client.Client_id}
+                                 ORDER BY `order`.`order_id`; ";
             DataBase.dt_clients = dataBase.Connect(DataBase.sqlcmd);
 
             for (int i = 0; i < DataBase.dt_clients.Rows.Count; i++)
@@ -212,11 +218,14 @@ namespace WpfApp1
             order.label_Phone.Content = client.Phone;
             order.label_Email.Content = client.Email;
             order.label_totalCost.Content = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][3];
+            order.label_OrderStatus.Content = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][4].ToString();
             // Какая-то ошибка:
             order.label_Date.Content = DateTime.Parse(DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][2].ToString()).ToString("dd/MM/yyyy  HH:mm:ss");
 
             order.Grid_client.Visibility = Visibility.Hidden;
+            order.comboBox1.Visibility = Visibility.Visible;
             order.button.Visibility = Visibility.Hidden;
+            order.button2.Visibility = Visibility.Visible;
 
             DataBase.sqlcmd = $@"SELECT cart.cart_id, product.Наименование, cart.Количество, product.Цена
                                 FROM product INNER JOIN (`order` INNER JOIN cart ON order.order_id = cart.order_id) ON product.product_id = cart.product_id
@@ -517,7 +526,6 @@ namespace WpfApp1
                             {
                                 treeView.Items.Add(dt.Rows[i][1]);
 
-
                             }
                         }
                     }
@@ -815,7 +823,7 @@ namespace WpfApp1
 
             if (dt_cart.Rows.Count == 0)
             {
-                dt_cart.Rows.Add(product.Product_id, product.Title, cart.Count_inCart+1, product.Cost, cart.maxCount, product.Cost);
+                dt_cart.Rows.Add(product.Product_id, product.Title, cart.Count_inCart + 1, product.Cost, cart.maxCount, product.Cost);
             }
             else
             {
@@ -884,7 +892,7 @@ namespace WpfApp1
             {
                 dt_cart.Rows[a][2] = int.Parse(dt_cart.Rows[a][2].ToString()) - 1;
             }
-            if(int.Parse(dt_cart.Rows[a][2].ToString()) == 0)
+            if (int.Parse(dt_cart.Rows[a][2].ToString()) == 0)
             {
                 dt_cart.Rows[a].Delete();
             }
@@ -899,7 +907,7 @@ namespace WpfApp1
             {
                 chip_count.Visibility = Visibility.Hidden;
             }
-            label3.Content = costcount; 
+            label3.Content = costcount;
             chip_count.Content = b.ToString();
             dataGrid_cart.ItemsSource = dt_cart.DefaultView;
         }
@@ -910,7 +918,7 @@ namespace WpfApp1
             a = dataGrid_cart.SelectedIndex;
             chip_count.Visibility = Visibility.Visible;
             int b = 0;
-            
+
             dt_cart.Rows[a].Delete();
             costcount = 0;
             for (int i = 0; i < dt_cart.Rows.Count; i++)
@@ -1005,8 +1013,12 @@ namespace WpfApp1
             order.add_cart();
             order.ShowDialog();
             Load_Products();
-            
             label1.Content = "";
+
+            order.comboBox1.Visibility = Visibility.Hidden;
+            order.button2.Visibility = Visibility.Hidden;
+            order.button.Visibility = Visibility.Visible;
+
             dataGrid_orders.Items.Clear();
         }
 

@@ -122,8 +122,50 @@
             </StackPanel>
 
         </Grid>
-        <Button x:Name="button" Content="Оформить заказ" HorizontalAlignment="Center" Margin="0,0,0,20" VerticalAlignment="Bottom" Click="button_Click"/>
+        <Button 
+            x:Name="button2" 
+            Content="Сохранить"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom" 
+            Margin="0,0,0,22" Height="28"
+        />
+        <Button 
+            x:Name="button" 
+            Content="Оформить заказ" 
+            HorizontalAlignment="Center" 
+            Margin="0,0,0,20"
+            VerticalAlignment="Bottom"
+            Click="button_Click"
+        />
         <Button x:Name="button1" Content="Назад" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Height="Auto" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="12" Click="button1_Click"/>
+        <ComboBox 
+            x:Name="comboBox1" 
+            HorizontalAlignment="Left" 
+            VerticalAlignment="Top" 
+            Width="150" 
+            Margin="130,218,0,0"  
+            Padding="0,2" 
+            Foreground="Gray"
+            FontSize="14" 
+            Visibility="Hidden"
+            SelectionChanged="comboBox1_SelectionChanged">
+            <ComboBoxItem 
+                Content="В обработке" 
+                Foreground="Gray"
+            />
+            <ComboBoxItem 
+                Content="Завершён"
+                Foreground="Green"
+            />
+            <ComboBoxItem 
+                Content="Отменён"
+                Foreground="Red"
+            />
+            <ComboBoxItem 
+                Content="Ожидает оплаты"
+                Foreground="Goldenrod"
+            />
+        </ComboBox>
 
     </Grid>
 </Window>
