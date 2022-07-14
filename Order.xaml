@@ -95,8 +95,7 @@
             <StackPanel>
                 <DataGrid 
                     x:Name="dataGrid" 
-                    Height="Auto" 
-                    MaxHeight="350"
+                    MaxHeight="300"
                     VerticalAlignment="Top" 
                     CanUserResizeColumns="False" 
                     CanUserSortColumns="False"
@@ -108,7 +107,31 @@
                     Width="Auto"
         />
                 <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
-                    <Label x:Name="label6" Content="Всего: " HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,2"/>
+                    <Label x:Name="label6" Content="Сумма без скидки: " HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,2"/>
+
+                    <Label 
+                        x:Name="label_Cost" 
+                        Content="     "
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom" 
+                        Margin="5,0,0,1" 
+                        Padding="0" FontSize="14"
+        />
+                </StackPanel>
+                <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
+                    <Label x:Name="label7" Content="Скидка: " HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" FontSize="14" Padding="0,0,0,2"/>
+
+                    <Label 
+                        x:Name="label_discount" 
+                        Content="0%"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom" 
+                        Margin="5,0,0,1" 
+                        Padding="0" FontSize="14"
+        />
+                </StackPanel>
+                <StackPanel Margin="10,5,0,0" Orientation="Horizontal">
+                    <Label x:Name="label8" Content="Сумма с учётом скидки: " HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" FontSize="16" Padding="0,0,0,2"/>
 
                     <Label 
                         x:Name="label_totalCost" 
@@ -116,7 +139,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom" 
                         Margin="5,0,0,1" 
-                        Padding="0" FontSize="16"
+                        Padding="0" FontSize="18"
         />
                 </StackPanel>
             </StackPanel>
