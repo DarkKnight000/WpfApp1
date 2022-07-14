@@ -31,7 +31,7 @@ namespace WpfApp1
             Load_Products();
         }
 
-        public static int costcount;        // Общая сумма
+        public static double costcount;        // Общая сумма
         int a;
         public static bool show_order = false;
         bool search_client = false;         // Поиск клиента
@@ -182,10 +182,8 @@ namespace WpfApp1
                              $"Email:   {client.Email} \n" +
                              $"День рождения:   {client.BDay}";
 
-            /*DataBase.sqlcmd = $@"SELECT *
-                                 FROM `order`
-                                 WHERE client_id = {client.Client_id}";*/
-            DataBase.sqlcmd = $@"SELECT `order`.`order_id`, `order`.`client_id`, `order`.`Дата`, `order`.`Общая сумма`, `order status`.`Статус заказа`
+            
+            DataBase.sqlcmd = $@"SELECT `order`.`order_id`, `order`.`client_id`, `order`.`Дата`, `order`.`Скидка`, `order`.`Общая сумма`, `order status`.`Статус заказа`
                                  FROM `order` 
 	                             LEFT JOIN `order status` ON `order`.`Статус заказа` = `order status`.`status_id`
                                  WHERE client_id = {client.Client_id}
@@ -199,8 +197,9 @@ namespace WpfApp1
                     Order_id = Convert.ToString(DataBase.dt_clients.Rows[i][0]),
                     Client_id = Convert.ToString(DataBase.dt_clients.Rows[i][1]),
                     Order_Date = Convert.ToString(DataBase.dt_clients.Rows[i][2]),
-                    Total_cost = Convert.ToString(DataBase.dt_clients.Rows[i][3]),
-                    Order_status = Convert.ToString(DataBase.dt_clients.Rows[i][4])
+                    Discount = Convert.ToString(DataBase.dt_clients.Rows[i][3]),
+                    Total_cost = Convert.ToString(DataBase.dt_clients.Rows[i][4]),
+                    Order_status = Convert.ToString(DataBase.dt_clients.Rows[i][5])
                 };
                 dataGrid_orders.Items.Add(orders);
             }
@@ -217,8 +216,11 @@ namespace WpfApp1
             order.label_FIO.Content = client.FIO;
             order.label_Phone.Content = client.Phone;
             order.label_Email.Content = client.Email;
-            order.label_totalCost.Content = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][3];
-            order.label_OrderStatus.Content = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][4].ToString();
+            double a = double.Parse(DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][4].ToString()) / ((100 - double.Parse(DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][3].ToString())) / 100);
+            order.label_Cost.Content = $"{a}";
+            order.label_discount.Content = $"{DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][3]}%";
+            order.label_totalCost.Content = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][4];
+            order.label_OrderStatus.Content = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][5].ToString();
             // Какая-то ошибка:
             order.label_Date.Content = DateTime.Parse(DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][2].ToString()).ToString("dd/MM/yyyy  HH:mm:ss");
 
@@ -1009,7 +1011,7 @@ namespace WpfApp1
             Order order = new Order();
             order.label_Date.Content = DateTime.Now.ToString("dd/MM/yyyy");
 
-            order.label_totalCost.Content = costcount;
+            order.label_Cost.Content = costcount;
             order.add_cart();
             order.ShowDialog();
             Load_Products();
@@ -1063,6 +1065,7 @@ namespace WpfApp1
         public string Order_id { get; set; }
         public string Client_id { get; set; }
         public string Order_Date { get; set; }
+        public string Discount { get; set; }
         public string Total_cost { get; set; }
         public string Order_status { get; set; }
     }

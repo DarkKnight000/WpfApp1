@@ -27,6 +27,8 @@ namespace WpfApp1
 
         DataTable dt_clients;
         int client_id;
+        double discount = 0;
+        double discount_cost;
         DataBase data = new DataBase();
 
         // Вывод клиентов в комбобокс:
@@ -51,10 +53,29 @@ namespace WpfApp1
 
             try
             {
+                string date = dt_clients.Rows[comboBox.SelectedIndex][4].ToString();
+                date = date.Remove(date.Length - 13);
+
                 label_FIO.Content = dt_clients.Rows[comboBox.SelectedIndex][1];
                 label_Phone.Content = dt_clients.Rows[comboBox.SelectedIndex][2];
                 label_Email.Content = dt_clients.Rows[comboBox.SelectedIndex][3];
                 client_id = int.Parse(dt_clients.Rows[comboBox.SelectedIndex][0].ToString());
+
+                string dateNow = DateTime.Now.ToString();
+                dateNow = dateNow.Remove(dateNow.Length - 14);
+
+                //MessageBox.Show(date + "   " + dateNow);
+                if (date == dateNow)
+                {
+                    discount = 5;
+                }
+                else
+                {
+                    discount = 0;
+                }
+                label_discount.Content = $"{discount}%";
+                discount_cost = MainWindow.costcount * (1 - discount / 100);
+                label_totalCost.Content = discount_cost;
             }
             catch { }
 
@@ -102,8 +123,8 @@ namespace WpfApp1
                 DataBase.sqlcmd = $@"START TRANSACTION;
 
                                      INSERT INTO `order`
-                                     (client_id, Дата, `Общая сумма`, `Статус заказа`)
-                                     VALUES ({client_id}, NOW(), {MainWindow.costcount}, 4);
+                                     (client_id, Дата, `Скидка`, `Общая сумма`, `Статус заказа`)
+                                     VALUES ({client_id}, NOW(), {discount}, {discount_cost}, 4);
 
                                      SELECT order_id 
                                      FROM `order` 
