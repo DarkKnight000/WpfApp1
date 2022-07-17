@@ -8,7 +8,7 @@
     x:Class="WpfApp1.MainWindow"
     mc:Ignorable="d"
     Title="MainWindow" 
-    Height="720" 
+    Height="800" 
     Width="1400"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
@@ -47,7 +47,7 @@
     <Grid>
         <TabControl 
             x:Name="tabControl"  
-            Height="670" 
+            Height="750" 
             TextOptions.TextFormattingMode="Display"
             TabStripPlacement="Left"
             ScrollViewer.HorizontalScrollBarVisibility="Visible"
@@ -86,7 +86,7 @@
                         x:Name="dataGrid1" 
                         Style="{StaticResource MaterialDesignDataGrid}"
                         HorizontalAlignment="Left"
-                        MaxHeight="445"
+                        MaxHeight="500"
                         Width="810"
                         Background="Transparent"
                         CanUserSortColumns="True"
@@ -329,7 +329,7 @@
                     <DataGrid
                         x:Name="dataGrid_orders" 
                         HorizontalAlignment="Right" 
-                        Height="380" 
+                        Height="440" 
                         Width="424" 
                         VerticalAlignment="Bottom" 
                         Margin="0,0,10,10"
@@ -422,7 +422,7 @@
                         CanUserDeleteRows="False"
                         IsReadOnly="True"
                         GridLinesVisibility="Horizontal"
-                        ColumnHeaderStyle="{StaticResource GridViewColumnHeaderStyle1}">
+                        ColumnHeaderStyle="{StaticResource GridViewColumnHeaderStyle1}" MaxHeight="600">
                         <DataGrid.Columns>
                             <DataGridTextColumn 
                                 Width="0"
@@ -690,7 +690,7 @@
                     Cursor="Arrow">
                     <TreeView
                         x:Name="treeView" 
-                        Margin="10,50,300,100" 
+                        Margin="10,30,300,50" 
                         ScrollViewer.CanContentScroll="True" 
                         PreviewMouseRightButtonDown="treeView_PreviewMouseRightButtonDown">
                         <TreeView.ContextMenu>
@@ -724,7 +724,7 @@
                     <TextBox 
                         x:Name="textBox_addCategory" 
                         HorizontalAlignment="Right" 
-                        Margin="0,50,10,0" 
+                        Margin="0,30,10,0" 
                         TextWrapping="Wrap"
                         VerticalAlignment="Top" 
                         Width="280"
@@ -734,7 +734,7 @@
                         x:Name="button2" 
                         Content="Добавить категорию" 
                         HorizontalAlignment="Right" 
-                        Margin="0,100,10,0" 
+                        Margin="0,80,10,0" 
                         VerticalAlignment="Top" 
                         Width="280" 
                         FontSize="18" 
@@ -743,7 +743,7 @@
                     <ComboBox 
                         x:Name="comboBox_category" 
                         HorizontalAlignment="Right"
-                        Margin="0,180,10,0" 
+                        Margin="0,160,10,0" 
                         VerticalAlignment="Top"
                         Width="280"
                         MaxDropDownHeight="300"
@@ -753,7 +753,7 @@
                         x:Name="textBox_addTitle" 
                         Text="" 
                         HorizontalAlignment="Right"
-                        Margin="0,250,10,0"
+                        Margin="0,220,10,0"
                         VerticalAlignment="Top" 
                         Width="280"
                         materialDesign:HintAssist.Hint="Наименование"
@@ -764,7 +764,7 @@
                         x:Name="textBox_addCount" 
                         Text="" 
                         HorizontalAlignment="Right"
-                        Margin="0,300,10,0"
+                        Margin="0,270,10,0"
                         VerticalAlignment="Top" 
                         Width="280"
                         materialDesign:HintAssist.Hint="Количество"
@@ -775,22 +775,43 @@
                         x:Name="textBox_addCost" 
                         Text="" 
                         HorizontalAlignment="Right"
-                        Margin="0,350,10,0"
+                        Margin="0,320,10,0"
                         VerticalAlignment="Top" 
                         Width="280"
                         materialDesign:HintAssist.Hint="Цена"
                         materialDesign:HintAssist.Foreground="Gray"
-                        BorderBrush="#FF0078D7" PreviewKeyDown="textBox_addCost_PreviewKeyDown" PreviewTextInput="textBox_addCost_PreviewTextInput"
+                        BorderBrush="#FF0078D7" 
+                        PreviewKeyDown="textBox_addCost_PreviewKeyDown" 
+                        PreviewTextInput="textBox_addCost_PreviewTextInput"
                     />
                     <Button 
                         x:Name="button3" 
                         Content="Добавить товар"
                         HorizontalAlignment="Right" 
-                        Margin="0,430,10,0" 
+                        Margin="0,390,10,0" 
                         VerticalAlignment="Top"
                         Width="280" 
                         FontSize="18" 
                         Click="button3_Click"
+                    />
+                    <Label x:Name="label4" Content="------------Приём/Списание------------" HorizontalAlignment="Right" Margin="0,0,10,250" VerticalAlignment="Bottom" FontSize="16" Padding="0,4" Width="280"/>
+                    <ComboBox 
+                        x:Name="comboBox" 
+                        materialDesign:HintAssist.Hint="Категория"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,10,200" 
+                        VerticalAlignment="Bottom" 
+                        Width="280" 
+                        MaxDropDownHeight="250" SelectionChanged="comboBox_SelectionChanged"
+                    />
+                    <ComboBox 
+                        x:Name="comboBox1" 
+                        materialDesign:HintAssist.Hint="Наименование"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,10,150" 
+                        VerticalAlignment="Bottom" 
+                        Width="280" 
+                        MaxDropDownHeight="250"
                     />
                 </Grid>
             </TabItem>

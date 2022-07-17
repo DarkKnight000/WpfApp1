@@ -518,6 +518,7 @@ namespace WpfApp1
             DataBase.sqlcmd = "SELECT * FROM category ORDER BY Категория";
             dt = dataBase.Connect(DataBase.sqlcmd);
             comboBox_category.Items.Clear();
+            comboBox.Items.Clear();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 for (int j = 0; j < DataBase.dt_clients.Rows.Count; j++)
@@ -539,6 +540,7 @@ namespace WpfApp1
                     }
                 }
                 comboBox_category.Items.Add(dt.Rows[i][1]);
+                comboBox.Items.Add(dt.Rows[i][1]);
             }
         }
 
@@ -616,18 +618,21 @@ namespace WpfApp1
         {
             if (check_prod == false)
             {
-                DataBase.sqlcmd = $@"INSERT INTO a0697344_test.`product` (Категория, Наименование, `На складе`, Цена)
+                if (comboBox_category.SelectedItem != "" && textBox_addTitle.Text != "" && textBox_addCount.Text != "" && textBox_addCost.Text != "")
+                {
+                    DataBase.sqlcmd = $@"INSERT INTO a0697344_test.`product` (Категория, Наименование, `На складе`, Цена)
                                  SELECT a0697344_test.category.category_id, '{textBox_addTitle.Text}', {textBox_addCount.Text}, {textBox_addCost.Text}
                                  FROM a0697344_test.product, a0697344_test.category
                                  WHERE a0697344_test.category.Категория='{comboBox_category.SelectedItem}' 
                                        AND NOT EXISTS (SELECT 1 FROM a0697344_test.`product` WHERE (Наименование) IN ('{textBox_addTitle.Text}')) 
                                  LIMIT 1;"
-                ;
-                dataBase.Connect(DataBase.sqlcmd);
-                Load_Products();
-                textBox_addTitle.Text = "";
-                textBox_addCount.Text = "";
-                textBox_addCost.Text = "";
+                    ;
+                    dataBase.Connect(DataBase.sqlcmd);
+                    Load_Products();
+                    textBox_addTitle.Text = "";
+                    textBox_addCount.Text = "";
+                    textBox_addCost.Text = "";
+                }
             }
             else
             {
@@ -1041,6 +1046,21 @@ namespace WpfApp1
 
         #endregion Заказ
 
+        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            comboBox1.Items.Clear();
+            DataBase.sqlcmd = $@"SELECT `category`.`category_id`, `product`.`Наименование`, `product`.`На складе`
+                                 FROM `product` 
+	                                  LEFT JOIN `category` ON `product`.`Категория` = `category`.`category_id`
+                                 WHERE category.Категория = '{comboBox.SelectedItem}';"
+            ;
+            DataTable dt = new DataTable();
+            dt = dataBase.Connect(DataBase.sqlcmd);
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                comboBox1.Items.Add(dt.Rows[i][1].ToString());
+            }
+        }
     }
 
     // Товары:
