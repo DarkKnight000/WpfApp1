@@ -794,7 +794,16 @@
                         FontSize="18" 
                         Click="button3_Click"
                     />
-                    <Label x:Name="label4" Content="------------Приём/Списание------------" HorizontalAlignment="Right" Margin="0,0,10,250" VerticalAlignment="Bottom" FontSize="16" Padding="0,4" Width="280"/>
+                    <Label 
+                        x:Name="label4" 
+                        Content="------------ Приём/Списание ------------" 
+                        HorizontalAlignment="Right" 
+                        Margin="0,0,10,250" 
+                        VerticalAlignment="Bottom" 
+                        FontSize="16" 
+                        Padding="0,4" 
+                        Width="280"
+                    />
                     <ComboBox 
                         x:Name="comboBox" 
                         materialDesign:HintAssist.Hint="Категория"
@@ -811,7 +820,20 @@
                         Margin="0,0,10,150" 
                         VerticalAlignment="Bottom" 
                         Width="280" 
-                        MaxDropDownHeight="250"
+                        MaxDropDownHeight="250" SelectionChanged="comboBox1_SelectionChanged"
+                    />
+                    <xctk:IntegerUpDown 
+                        x:Name="kolProduct" 
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Bottom" 
+                        Margin="0,0,10,100" 
+                        Width="100" 
+                        FontSize="24" 
+                        Value="0" 
+                        DisplayDefaultValueOnEmptyText="True" 
+                        HorizontalContentAlignment="Left"
                     />
                 </Grid>
             </TabItem>

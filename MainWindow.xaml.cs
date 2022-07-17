@@ -1046,6 +1046,7 @@ namespace WpfApp1
 
         #endregion Заказ
 
+        // Выбор категории и наименования товара для приёма/списания:
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             comboBox1.Items.Clear();
@@ -1054,11 +1055,26 @@ namespace WpfApp1
 	                                  LEFT JOIN `category` ON `product`.`Категория` = `category`.`category_id`
                                  WHERE category.Категория = '{comboBox.SelectedItem}';"
             ;
-            DataTable dt = new DataTable();
-            dt = dataBase.Connect(DataBase.sqlcmd);
-            for (int i = 0; i < dt.Rows.Count; i++)
+            //DataTable dt_clients = new DataTable();
+            DataBase.dt_clients = dataBase.Connect(DataBase.sqlcmd);
+            for (int i = 0; i < DataBase.dt_clients.Rows.Count; i++)
             {
-                comboBox1.Items.Add(dt.Rows[i][1].ToString());
+                comboBox1.Items.Add(DataBase.dt_clients.Rows[i][1].ToString());
+            }
+        }
+
+        private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            kolProduct.Value = 0;
+            try
+            {
+                var a = int.Parse(DataBase.dt_clients.Rows[comboBox1.SelectedIndex][2].ToString());
+                kolProduct.Maximum = a;
+                kolProduct.Minimum = a * (-1);
+            }
+            catch 
+            {
+                kolProduct.Value = 0;
             }
         }
     }
