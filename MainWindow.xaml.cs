@@ -225,6 +225,7 @@ namespace WpfApp1
             order.label_discount.Content = $"{DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][3]}%";
             order.label_totalCost.Content = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][4];
             order.label_OrderStatus.Content = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][5].ToString();
+            order.status = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][5].ToString();
             // Какая-то ошибка:
             order.label_Date.Content = DateTime.Parse(DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][2].ToString()).ToString("dd/MM/yyyy  HH:mm:ss");
 
@@ -243,6 +244,8 @@ namespace WpfApp1
             dt_order = dataBase.Connect(DataBase.sqlcmd);
             order.add_cart();
             order.ShowDialog();
+
+            DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][5] = order.status;
 
             show_order = false;
         }

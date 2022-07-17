@@ -28,6 +28,7 @@ namespace WpfApp1
         DataTable dt_clients;
         int client_id;
         public int order_id;
+        public string status;
         double discount = 0;
         double discount_cost = 0.00;
         DataBase dataBase = new DataBase();
@@ -191,7 +192,7 @@ namespace WpfApp1
         {
             //MessageBox.Show(order_id.ToString());
             //MessageBox.Show(label_OrderStatus.Content.ToString());
-            string status = label_OrderStatus.Content.ToString();
+            status = label_OrderStatus.Content.ToString();
             DataBase.sqlcmd = $@"UPDATE `order`, `order_status`
                                  SET `order`.`Статус заказа` = `order_status`.`status_id` 
                                  WHERE `order_status`.`Статус заказа` = '{status}' AND `order`.`order_id` = {order_id}"
