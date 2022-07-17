@@ -19,11 +19,11 @@ namespace WpfApp1
         {
             connection = new MySqlConnectionStringBuilder()
             {
-                Server = "a0686088.xsph.ru",
+                Server = "a0697344.xsph.ru", //"sql11.freesqldatabase.com", //"a0686088.xsph.ru",
                 Port = 3306,
-                Database = "a0686088_test",
-                UserID = "a0686088",
-                Password = "dipabeutuw"
+                Database = "a0697344_test", //"sql11507065", //"a0697344_test",
+                UserID = "a0697344", //"sql11507065", //"a0686088",
+                Password = "azwaehitsa", //"SHa2WYRQ7n", //"dipabeutuw"
             };
         }
 
@@ -32,19 +32,19 @@ namespace WpfApp1
         {
             DataTable dt = new DataTable();
 
-            try
-            {
+            //try
+            //{
                 MySqlConnection conn = new MySqlConnection(connection.ConnectionString);
                 conn.Open();
                 MySqlCommand sqlCommand = new MySqlCommand(sqlcmd, conn);
                 MySqlDataAdapter da = new MySqlDataAdapter(sqlCommand);
                 da.Fill(dt);
                 conn.Close();
-            }
+            /*}
             catch
             {
                 MessageBox.Show("Ошибка подключения!");
-            }
+            }*/
 
             return dt;
         }

@@ -31,7 +31,7 @@ namespace WpfApp1
             Load_Products();
         }
 
-        public static double costcount;        // Общая сумма
+        public static double costcount = 0.00;        // Общая сумма
         int a;
         public static bool show_order = false;
         bool search_client = false;         // Поиск клиента
@@ -61,7 +61,7 @@ namespace WpfApp1
             dataGrid1.Items.Clear();
             DataBase.sqlcmd = @"SELECT * 
                                 FROM `clients`
-                                ORDER BY ФИО";
+                                ";
             DataBase.dt_clients = dataBase.Connect(DataBase.sqlcmd);
             for (int i = 0; i < DataBase.dt_clients.Rows.Count; i++)
             {
@@ -183,9 +183,9 @@ namespace WpfApp1
                              $"День рождения:   {client.BDay}";
 
             
-            DataBase.sqlcmd = $@"SELECT `order`.`order_id`, `order`.`client_id`, `order`.`Дата`, `order`.`Скидка`, `order`.`Общая сумма`, `order status`.`Статус заказа`
+            DataBase.sqlcmd = $@"SELECT `order`.`order_id`, `order`.`client_id`, `order`.`Дата`, `order`.`Скидка`, `order`.`Общая сумма`, `order_status`.`Статус заказа`
                                  FROM `order` 
-	                             LEFT JOIN `order status` ON `order`.`Статус заказа` = `order status`.`status_id`
+	                             LEFT JOIN `order_status` ON `order`.`Статус заказа` = `order_status`.`status_id`
                                  WHERE client_id = {client.Client_id}
                                  ORDER BY `order`.`order_id`; ";
             DataBase.dt_clients = dataBase.Connect(DataBase.sqlcmd);
@@ -198,7 +198,7 @@ namespace WpfApp1
                     Client_id = Convert.ToString(DataBase.dt_clients.Rows[i][1]),
                     Order_Date = Convert.ToString(DataBase.dt_clients.Rows[i][2]),
                     Discount = Convert.ToString(DataBase.dt_clients.Rows[i][3]),
-                    Total_cost = Convert.ToString(DataBase.dt_clients.Rows[i][4]),
+                    Total_cost = Convert.ToDouble(DataBase.dt_clients.Rows[i][4]),
                     Order_status = Convert.ToString(DataBase.dt_clients.Rows[i][5])
                 };
                 dataGrid_orders.Items.Add(orders);
@@ -213,10 +213,14 @@ namespace WpfApp1
             Order order = new Order();
 
             order.label.Content = $"Заказ № {DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][0]}";
+
+            order.order_id = int.Parse(DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][0].ToString());
+
             order.label_FIO.Content = client.FIO;
             order.label_Phone.Content = client.Phone;
             order.label_Email.Content = client.Email;
             double a = double.Parse(DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][4].ToString()) / ((100 - double.Parse(DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][3].ToString())) / 100);
+            a = Math.Round(a, 2);
             order.label_Cost.Content = $"{a}";
             order.label_discount.Content = $"{DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][3]}%";
             order.label_totalCost.Content = DataBase.dt_clients.Rows[dataGrid_orders.SelectedIndex][4];
@@ -235,7 +239,6 @@ namespace WpfApp1
             ;
 
             dt_order = new DataTable();
-
 
             dt_order = dataBase.Connect(DataBase.sqlcmd);
             order.add_cart();
@@ -450,7 +453,7 @@ namespace WpfApp1
                     Category = Convert.ToString(DataBase.dt_clients.Rows[i][1]),
                     Title = Convert.ToString(DataBase.dt_clients.Rows[i][2]),
                     Count = Convert.ToString(DataBase.dt_clients.Rows[i][3]),
-                    Cost = Convert.ToString(DataBase.dt_clients.Rows[i][4]),
+                    Cost = Convert.ToDouble(DataBase.dt_clients.Rows[i][4]),
                 };
                 dataGrid2.Items.Add(product);
 
@@ -610,11 +613,11 @@ namespace WpfApp1
         {
             if (check_prod == false)
             {
-                DataBase.sqlcmd = $@"INSERT INTO a0686088_test.`product` (Категория, Наименование, `На складе`, Цена)
-                                 SELECT a0686088_test.category.category_id, '{textBox_addTitle.Text}', {textBox_addCount.Text}, {textBox_addCost.Text}
-                                 FROM a0686088_test.product, a0686088_test.category
-                                 WHERE a0686088_test.category.Категория='{comboBox_category.SelectedItem}' 
-                                       AND NOT EXISTS (SELECT 1 FROM a0686088_test.`product` WHERE (Наименование) IN ('{textBox_addTitle.Text}')) 
+                DataBase.sqlcmd = $@"INSERT INTO a0697344_test.`product` (Категория, Наименование, `На складе`, Цена)
+                                 SELECT a0697344_test.category.category_id, '{textBox_addTitle.Text}', {textBox_addCount.Text}, {textBox_addCost.Text}
+                                 FROM a0697344_test.product, a0697344_test.category
+                                 WHERE a0697344_test.category.Категория='{comboBox_category.SelectedItem}' 
+                                       AND NOT EXISTS (SELECT 1 FROM a0697344_test.`product` WHERE (Наименование) IN ('{textBox_addTitle.Text}')) 
                                  LIMIT 1;"
                 ;
                 dataBase.Connect(DataBase.sqlcmd);
@@ -625,11 +628,12 @@ namespace WpfApp1
             }
             else
             {
+                
                 DataBase.sqlcmd = $@"UPDATE `product`, `category`
                                      SET `product`.`Категория` = category.category_id, 
                                          `product`.`Наименование` = '{textBox_addTitle.Text}', 
                                          `На складе` = '{textBox_addCount.Text}', 
-                                         `Цена` = '{textBox_addCost.Text}' 
+                                         `Цена` = '{textBox_addCost.Text}'
                                      WHERE `product`.`Наименование` = '{title}' AND `category`.`Категория` = '{comboBox_category.SelectedItem}'"
                 ;
                 dataBase.Connect(DataBase.sqlcmd);
@@ -697,6 +701,8 @@ namespace WpfApp1
                         textBox_addTitle.Text = dt.Rows[0][2].ToString();
                         textBox_addCount.Text = dt.Rows[0][3].ToString();
                         textBox_addCost.Text = dt.Rows[0][4].ToString();
+
+                        textBox_addCost.Text = textBox_addCost.Text.Replace(",", ".");
 
                         categ = dt.Rows[0][1].ToString();
                         title = dt.Rows[0][2].ToString();
@@ -805,9 +811,9 @@ namespace WpfApp1
             dt_cart.Columns.Add("Product_id", typeof(int));
             dt_cart.Columns.Add("Title", typeof(string));
             dt_cart.Columns.Add("Count_inCart", typeof(int));
-            dt_cart.Columns.Add("Cost_inCart", typeof(int));
+            dt_cart.Columns.Add("Cost_inCart", typeof(double));
             dt_cart.Columns.Add("maxCount", typeof(int));
-            dt_cart.Columns.Add("Prod_Cost", typeof(int));
+            dt_cart.Columns.Add("Prod_Cost", typeof(double));
         }
 
         // Добавление в корзину:
@@ -836,7 +842,7 @@ namespace WpfApp1
                         if (int.Parse(dt_cart.Rows[i][2].ToString()) < int.Parse(cart.maxCount))
                         {
                             dt_cart.Rows[i][2] = int.Parse(dt_cart.Rows[i][2].ToString()) + 1;
-                            dt_cart.Rows[i][3] = int.Parse(dt_cart.Rows[i][2].ToString()) * int.Parse(dt_cart.Rows[i][5].ToString());
+                            dt_cart.Rows[i][3] = int.Parse(dt_cart.Rows[i][2].ToString()) * double.Parse(dt_cart.Rows[i][5].ToString());
                         }
                         break;
                     }
@@ -850,12 +856,13 @@ namespace WpfApp1
             costcount = 0;
             for (int i = 0; i < dt_cart.Rows.Count; i++)
             {
-                costcount += int.Parse(dt_cart.Rows[i][3].ToString());
+                costcount += double.Parse(dt_cart.Rows[i][3].ToString());
                 b += int.Parse(dt_cart.Rows[i][2].ToString());
             }
 
             dataGrid_cart.ItemsSource = dt_cart.DefaultView;
             chip_count.Content = b.ToString();
+            costcount = Math.Round(costcount, 2);
             label3.Content = costcount;
 
         }
@@ -874,10 +881,11 @@ namespace WpfApp1
             costcount = 0;
             for (int i = 0; i < dt_cart.Rows.Count; i++)
             {
-                dt_cart.Rows[i][3] = int.Parse(dt_cart.Rows[i][2].ToString()) * int.Parse(dt_cart.Rows[i][5].ToString());
-                costcount += int.Parse(dt_cart.Rows[i][3].ToString());
+                dt_cart.Rows[i][3] = int.Parse(dt_cart.Rows[i][2].ToString()) * double.Parse(dt_cart.Rows[i][5].ToString());
+                costcount += double.Parse(dt_cart.Rows[i][3].ToString());
                 b += int.Parse(dt_cart.Rows[i][2].ToString());
             }
+            costcount = Math.Round(costcount, 2);
             label3.Content = costcount;
             chip_count.Content = b.ToString();
             dataGrid_cart.ItemsSource = dt_cart.DefaultView;
@@ -901,14 +909,15 @@ namespace WpfApp1
             costcount = 0;
             for (int i = 0; i < dt_cart.Rows.Count; i++)
             {
-                dt_cart.Rows[i][3] = int.Parse(dt_cart.Rows[i][2].ToString()) * int.Parse(dt_cart.Rows[i][5].ToString());
-                costcount += int.Parse(dt_cart.Rows[i][3].ToString());
+                dt_cart.Rows[i][3] = int.Parse(dt_cart.Rows[i][2].ToString()) * double.Parse(dt_cart.Rows[i][5].ToString());
+                costcount += double.Parse(dt_cart.Rows[i][3].ToString());
                 b += int.Parse(dt_cart.Rows[i][2].ToString());
             }
             if (b == 0)
             {
                 chip_count.Visibility = Visibility.Hidden;
             }
+            costcount = Math.Round(costcount, 2);
             label3.Content = costcount;
             chip_count.Content = b.ToString();
             dataGrid_cart.ItemsSource = dt_cart.DefaultView;
@@ -925,14 +934,15 @@ namespace WpfApp1
             costcount = 0;
             for (int i = 0; i < dt_cart.Rows.Count; i++)
             {
-                dt_cart.Rows[i][3] = int.Parse(dt_cart.Rows[i][2].ToString()) * int.Parse(dt_cart.Rows[i][5].ToString());
-                costcount += int.Parse(dt_cart.Rows[i][3].ToString());
+                dt_cart.Rows[i][3] = int.Parse(dt_cart.Rows[i][2].ToString()) * double.Parse(dt_cart.Rows[i][5].ToString());
+                costcount += double.Parse(dt_cart.Rows[i][3].ToString());
                 b += int.Parse(dt_cart.Rows[i][2].ToString());
             }
             if (b == 0)
             {
                 chip_count.Visibility = Visibility.Hidden;
             }
+            costcount = Math.Round(costcount, 2);
             label3.Content = costcount;
             chip_count.Content = b.ToString();
             dataGrid_cart.ItemsSource = dt_cart.DefaultView;
@@ -989,7 +999,7 @@ namespace WpfApp1
                     Category = Convert.ToString(DataBase.dt_clients.Rows[i][1]),
                     Title = Convert.ToString(DataBase.dt_clients.Rows[i][2]),
                     Count = Convert.ToString(DataBase.dt_clients.Rows[i][3]),
-                    Cost = Convert.ToString(DataBase.dt_clients.Rows[i][4]),
+                    Cost = Convert.ToDouble(DataBase.dt_clients.Rows[i][4]),
                 };
 
                 dataGrid2.Items.Add(product);
@@ -1011,6 +1021,7 @@ namespace WpfApp1
             Order order = new Order();
             order.label_Date.Content = DateTime.Now.ToString("dd/MM/yyyy");
 
+            costcount = Math.Round(costcount, 2);
             order.label_Cost.Content = costcount;
             order.add_cart();
             order.ShowDialog();
@@ -1036,7 +1047,7 @@ namespace WpfApp1
         public string Category { get; set; }
         public string Title { get; set; }
         public string Count { get; set; }
-        public string Cost { get; set; }
+        public double Cost { get; set; }
     }
 
     // Корзина:
@@ -1045,7 +1056,7 @@ namespace WpfApp1
         public string Cart_id { get; set; }
         public string Product_id_inCart { get; set; }
         public string Count_inCart { get; set; }
-        public string Cost_inCart { get; set; }
+        public double Cost_inCart { get; set; }
         public string maxCount { get; set; }
     }
 
@@ -1066,7 +1077,7 @@ namespace WpfApp1
         public string Client_id { get; set; }
         public string Order_Date { get; set; }
         public string Discount { get; set; }
-        public string Total_cost { get; set; }
+        public double Total_cost { get; set; }
         public string Order_status { get; set; }
     }
 }

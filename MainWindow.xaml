@@ -495,7 +495,7 @@
                                 BorderBrush="Gray">
                                 <Grid 
                                     Background="WhiteSmoke"
-                                    Width="450" 
+                                    Width="500" 
                                     Height="500" 
                                     MaxHeight="600" 
                                     Margin="0">
@@ -532,7 +532,7 @@
                                         GridLinesVisibility="Horizontal"
                                         ScrollViewer.VerticalScrollBarVisibility="Visible" 
                                         HorizontalScrollBarVisibility="Disabled" 
-                                        Width="430">
+                                        Width="480">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn 
                                                 Header="ID" 
@@ -542,12 +542,12 @@
                                             />
                                             <DataGridTextColumn 
                                                 Header="Наименование" 
-                                                Width="180"
+                                                Width="200"
                                                 Binding="{Binding Title}"
                                             />
                                             <DataGridTextColumn 
                                                 Header="Кол-во" 
-                                                Width="75"
+                                                Width="80"
                                                 FontSize="14"
                                                 Binding="{Binding Count_inCart}"
                                             />
@@ -617,7 +617,7 @@
                                         x:Name="button" 
                                         Content="Оформить заказ" 
                                         HorizontalAlignment="Right"
-                                        Margin="0,0,10,10" 
+                                        Margin="0,0,20,10" 
                                         VerticalAlignment="Bottom"
                                         Height="Auto" 
                                         Click="button_Click"
