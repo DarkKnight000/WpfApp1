@@ -32,19 +32,19 @@ namespace WpfApp1
         {
             DataTable dt = new DataTable();
 
-            //try
-            //{
+            try
+            {
                 MySqlConnection conn = new MySqlConnection(connection.ConnectionString);
                 conn.Open();
                 MySqlCommand sqlCommand = new MySqlCommand(sqlcmd, conn);
                 MySqlDataAdapter da = new MySqlDataAdapter(sqlCommand);
                 da.Fill(dt);
                 conn.Close();
-            /*}
+            }
             catch
             {
                 MessageBox.Show("Ошибка подключения!");
-            }*/
+            }
 
             return dt;
         }

@@ -201,7 +201,9 @@
                         materialDesign:HintAssist.Foreground="Gray"
                         BorderBrush="#FF0078D7" 
                         TextChanged="textBox1_TextChanged" 
-                        Height="47" PreviewTextInput="textBox1_PreviewTextInput" PreviewKeyDown="textBox1_PreviewKeyDown"
+                        Height="47" 
+                        PreviewTextInput="textBox1_PreviewTextInput" 
+                        PreviewKeyDown="textBox1_PreviewKeyDown"
                     />
                     <TextBox 
                         x:Name="textBox2" 
@@ -274,7 +276,9 @@
                         materialDesign:HintAssist.Hint="Номер телефона"
                         materialDesign:HintAssist.Foreground="Gray"
                         BorderBrush="#FF0078D7" 
-                        Height="31" PreviewTextInput="textBox4_PreviewTextInput" PreviewKeyDown="textBox4_PreviewKeyDown" 
+                        Height="31" 
+                        PreviewTextInput="textBox4_PreviewTextInput" 
+                        PreviewKeyDown="textBox4_PreviewKeyDown" 
                     />
                     <TextBox 
                         x:Name="textBox5" 
@@ -422,7 +426,8 @@
                         CanUserDeleteRows="False"
                         IsReadOnly="True"
                         GridLinesVisibility="Horizontal"
-                        ColumnHeaderStyle="{StaticResource GridViewColumnHeaderStyle1}" MaxHeight="600">
+                        ColumnHeaderStyle="{StaticResource GridViewColumnHeaderStyle1}" 
+                        MaxHeight="600">
                         <DataGrid.Columns>
                             <DataGridTextColumn 
                                 Width="0"
@@ -436,11 +441,11 @@
                                     <DataTemplate>
                                         <StackPanel>
                                             <TextBlock 
-                                            Width="Auto" 
-                                            Text="{Binding Title}"  
-                                            FontSize="14"
-                                            ToolTip="{Binding Category}"
-                                        />
+                                                Width="Auto" 
+                                                Text="{Binding Title}"  
+                                                FontSize="14"
+                                                ToolTip="{Binding Category}"
+                                            />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -769,7 +774,9 @@
                         Width="280"
                         materialDesign:HintAssist.Hint="Количество"
                         materialDesign:HintAssist.Foreground="Gray"
-                        BorderBrush="#FF0078D7" PreviewKeyDown="textBox_addCount_PreviewKeyDown" PreviewTextInput="textBox_addCount_PreviewTextInput"
+                        BorderBrush="#FF0078D7" 
+                        PreviewKeyDown="textBox_addCount_PreviewKeyDown" 
+                        PreviewTextInput="textBox_addCount_PreviewTextInput"
                     />
                     <TextBox 
                         x:Name="textBox_addCost" 
@@ -811,7 +818,8 @@
                         Margin="0,0,10,200" 
                         VerticalAlignment="Bottom" 
                         Width="280" 
-                        MaxDropDownHeight="250" SelectionChanged="comboBox_SelectionChanged"
+                        MaxDropDownHeight="250" 
+                        SelectionChanged="comboBox_SelectionChanged"
                     />
                     <ComboBox 
                         x:Name="comboBox1" 
@@ -820,7 +828,8 @@
                         Margin="0,0,10,150" 
                         VerticalAlignment="Bottom" 
                         Width="280" 
-                        MaxDropDownHeight="250" SelectionChanged="comboBox1_SelectionChanged"
+                        MaxDropDownHeight="250" 
+                        SelectionChanged="comboBox1_SelectionChanged"
                     />
                     <xctk:IntegerUpDown 
                         x:Name="kolProduct" 
@@ -833,7 +842,8 @@
                         FontSize="24" 
                         Value="0" 
                         DisplayDefaultValueOnEmptyText="True" 
-                        HorizontalContentAlignment="Left" ValueChanged="kolProduct_ValueChanged"
+                        HorizontalContentAlignment="Left"
+                        ValueChanged="kolProduct_ValueChanged"
                     />
                     <Label 
                         x:Name="label5" 
@@ -844,9 +854,20 @@
                         FontSize="20"
                         Foreground="Gray"
                     />
-                    <Button x:Name="button4" Content="Принять товар" HorizontalAlignment="Right" Margin="0,0,10,40" VerticalAlignment="Bottom" FontSize="20" Height="Auto" Width="280" Click="button4_Click"/>
+                    <Button 
+                        x:Name="button4" 
+                        Content="Принять товар" 
+                        HorizontalAlignment="Right"
+                        Margin="0,0,10,40" 
+                        VerticalAlignment="Bottom" 
+                        FontSize="20"
+                        Height="Auto"
+                        Width="280" 
+                        Click="button4_Click"
+                    />
                 </Grid>
             </TabItem>
         </TabControl>
     </Grid>
+    
 </Window>
