@@ -807,6 +807,75 @@ namespace WpfApp1
             }
         }
 
+        // Выбор категории и наименования товара для приёма/списания:
+        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            comboBox1.Items.Clear();
+            DataBase.sqlcmd = $@"SELECT `category`.`category_id`, `product`.`Наименование`, `product`.`На складе`
+                                 FROM `product` 
+	                                  LEFT JOIN `category` ON `product`.`Категория` = `category`.`category_id`
+                                 WHERE category.Категория = '{comboBox.SelectedItem}';"
+            ;
+            DataBase.dt_clients = dataBase.Connect(DataBase.sqlcmd);
+            for (int i = 0; i < DataBase.dt_clients.Rows.Count; i++)
+            {
+                comboBox1.Items.Add(DataBase.dt_clients.Rows[i][1].ToString());
+            }
+        }
+        // Лимит на списание товара:
+        private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            kolProduct.Value = 0;
+            try
+            {
+                int a = int.Parse(DataBase.dt_clients.Rows[comboBox1.SelectedIndex][2].ToString());
+                kolProduct.Minimum = a * (-1);
+            }
+            catch
+            {
+                kolProduct.Value = 0;
+            }
+        }
+        // Изменение количества товара для приёма/списания:
+        private void kolProduct_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (kolProduct.Value > 0)
+            {
+                button4.Content = "Принять товар";
+            }
+            else if (kolProduct.Value < 0)
+            {
+                button4.Content = "Списать товар";
+            }
+        }
+        // Приём/списание товара:
+        private void button4_Click(object sender, RoutedEventArgs e)
+        {
+            if (kolProduct.Value != 0)
+            {
+                DataBase.sqlcmd = $@"START TRANSACTION;
+
+                                     INSERT INTO income_outcome 
+                                        (Наименование, `Списание поступление`, Дата)
+                                        SELECT product.product_id, '{kolProduct.Value}', NOW()
+                                            FROM product
+                                     WHERE product.Наименование = '{comboBox1.SelectedItem}';
+
+                                     UPDATE product
+                                        SET `На складе` = `На складе` + {kolProduct.Value}
+                                        WHERE product.Наименование = '{comboBox1.SelectedItem}';
+
+                                     COMMIT;"
+                ;
+                dataBase.Connect(DataBase.sqlcmd);
+                Load_Products();
+
+                comboBox.SelectedItem = null;
+                comboBox1.SelectedItem = null;
+                kolProduct.Value = 0;
+            }
+        }
+
         #endregion Склад
 
         #region Корзина
@@ -1046,76 +1115,7 @@ namespace WpfApp1
 
         #endregion Заказ
 
-        // Выбор категории и наименования товара для приёма/списания:
-        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            comboBox1.Items.Clear();
-            DataBase.sqlcmd = $@"SELECT `category`.`category_id`, `product`.`Наименование`, `product`.`На складе`
-                                 FROM `product` 
-	                                  LEFT JOIN `category` ON `product`.`Категория` = `category`.`category_id`
-                                 WHERE category.Категория = '{comboBox.SelectedItem}';"
-            ;
-            DataBase.dt_clients = dataBase.Connect(DataBase.sqlcmd);
-            for (int i = 0; i < DataBase.dt_clients.Rows.Count; i++)
-            {
-                comboBox1.Items.Add(DataBase.dt_clients.Rows[i][1].ToString());
-            }
-        }
 
-        // Лимит на списание товара:
-        private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            kolProduct.Value = 0;
-            try
-            {
-                int a = int.Parse(DataBase.dt_clients.Rows[comboBox1.SelectedIndex][2].ToString());
-                kolProduct.Minimum = a * (-1);
-            }
-            catch 
-            {
-                kolProduct.Value = 0;
-            }
-        }
-
-        // Изменение количества товара для приёма/списания:
-        private void kolProduct_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if (kolProduct.Value > 0)
-            {
-                button4.Content = "Принять товар";
-            }
-            else if (kolProduct.Value < 0)
-            {
-                button4.Content = "Списать товар";
-            }
-        }
-
-        private void button4_Click(object sender, RoutedEventArgs e)
-        {
-            if (kolProduct.Value != 0)
-            {
-                DataBase.sqlcmd = $@"START TRANSACTION;
-
-                                     INSERT INTO income_outcome 
-                                        (Наименование, `Списание поступление`, Дата)
-                                        SELECT product.product_id, '{kolProduct.Value}', NOW()
-                                            FROM product
-                                     WHERE product.Наименование = '{comboBox1.SelectedItem}';
-
-                                     UPDATE product
-                                        SET `На складе` = `На складе` + {kolProduct.Value}
-                                        WHERE product.Наименование = '{comboBox1.SelectedItem}';
-
-                                     COMMIT;"
-                ;
-                dataBase.Connect(DataBase.sqlcmd);
-                Load_Products();
-
-                comboBox.SelectedItem = null;
-                comboBox1.SelectedItem = null;
-                kolProduct.Value = 0;
-            }
-        }
     }
 
     // Товары:
