@@ -188,10 +188,9 @@ namespace WpfApp1
 
         }
 
+        // Обновление статуса заказа:
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show(order_id.ToString());
-            //MessageBox.Show(label_OrderStatus.Content.ToString());
             status = label_OrderStatus.Content.ToString();
             DataBase.sqlcmd = $@"UPDATE `order`, `order_status`
                                  SET `order`.`Статус заказа` = `order_status`.`status_id` 

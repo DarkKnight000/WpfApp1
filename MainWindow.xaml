@@ -833,8 +833,18 @@
                         FontSize="24" 
                         Value="0" 
                         DisplayDefaultValueOnEmptyText="True" 
-                        HorizontalContentAlignment="Left"
+                        HorizontalContentAlignment="Left" ValueChanged="kolProduct_ValueChanged"
                     />
+                    <Label 
+                        x:Name="label5" 
+                        Content="Количество:"
+                        HorizontalAlignment="Right" 
+                        Margin="0,0,150,100"
+                        VerticalAlignment="Bottom" 
+                        FontSize="20"
+                        Foreground="Gray"
+                    />
+                    <Button x:Name="button4" Content="Принять товар" HorizontalAlignment="Right" Margin="0,0,10,40" VerticalAlignment="Bottom" FontSize="20" Height="Auto" Width="280" Click="button4_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
